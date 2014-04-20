@@ -1,0 +1,131 @@
+<html>
+<head>
+	<meta name = "viewport" content = "width = device-width, initial-scale = 1, user-scalable = no" />
+<style>
+
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+	
+	#wrapper {
+		width: 768px;
+		height: 512px;
+		overflow: hidden;
+		position: absolute;
+	}
+
+	#image { position: absolute; top:0px;}
+
+	#content {
+		width: 768px;
+		height: 512px;
+		position: absolute;
+		top:0px;
+		box-sizing:border-box;
+		padding: 0px 64px;
+		background-image: linear-gradient(-179deg, rgba(38,38,38,0.03) 51%, rgba(0,0,0,0.50) 100%);
+	}
+
+	#title {
+		width:640px;
+		height: 32px;
+		position: absolute;
+		top: 384px;
+		font-family: 'Century Schoolbook', Georgia, Times New Roman, serif;
+		font-size: 32px;
+		color: white;
+	}
+	#imagePosition {
+		width:640px;
+		border-top: 1px solid white;
+		height: 6px;
+		position: absolute;
+		top:447px;
+		overflow: hidden;
+	}
+
+	#marker {
+		width:100px;
+		position:absolute;
+		left:0px;
+		height: 2px;
+		background: white;
+	}
+
+</style>
+</head>
+<body>
+<style>
+
+#image {
+
+ background: url('london-panorama.png');
+
+}
+
+</style>
+
+<div id="wrapper">
+	<img id="image" src="london-panorama.png" />
+</div>
+<div id="content">
+	<div id="title">The title goes here</div>
+	<div id="imagePosition">
+		<div id="marker"></div>
+	</div>
+
+</div>
+<script type="text/javascript">
+
+    init();
+    var count = 0;
+    
+    function init() {
+      if (window.DeviceOrientationEvent) {
+        
+        // Listen for the deviceorientation event and handle the raw data
+        window.addEventListener('deviceorientation', function(eventData) {
+          // gamma is the left-to-right tilt in degrees, where right is positive
+          var tiltLR = eventData.gamma;
+          var tilt;
+
+          if (tiltLR <= -30) {
+          	tilt = -30;
+          }
+          else if (tiltLR >= 30) {
+          	tilt = 30;
+          }
+          else {
+          	tilt = tiltLR;
+          }
+          
+          // call our orientation event handler
+          deviceOrientationHandler(tilt);
+          }, false);
+      } else {
+        // document.getElementById("doEvent").innerHTML = "Not supported on your device or browser.  Sorry."
+      }
+    }
+  
+    function deviceOrientationHandler(tilt) {
+
+      var imgWidth = document.getElementById("image").width;
+      var devWidth = window.innerWidth;
+
+      var leftValue = (tilt + 30) * ( imgWidth - devWidth) / 60 * -1;
+
+      document.getElementById("image").style.left= leftValue;
+
+      var markerWidth = devWidth / imgWidth * 640;
+      var markerLeftValue = (tilt + 30) / 60 * (640 - markerWidth);
+
+      var marker = document.getElementById("marker");
+
+      marker.style.width= markerWidth;
+      marker.style.left = markerLeftValue;
+
+
+    }
+    
+  </script>
+</body>
+</html>
